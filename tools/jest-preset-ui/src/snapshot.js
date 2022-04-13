@@ -18,7 +18,7 @@ if (!process.env.SCREENSHOT_URL) {
   throw new Error('Create .env file and insert SCREENSHOT_URL variable');
 }
 
-async function snapshot(Component, options = { selector: '#root' }) {
+async function snapshot(Component, states, options = { selector: '#root' }) {
   const _tmp = document.createElement('div');
 
   ReactDOM.render(Component, _tmp);
@@ -80,12 +80,14 @@ async function snapshot(Component, options = { selector: '#root' }) {
     </html>`;
 
   /* Uncomment line below to debug snapshot in your browser */
-  // fs.writeFileSync('./tmp.html', html);
+  fs.writeFileSync('./tmp.html', html);
+
   const { body } = await post({
     url: process.env.SCREENSHOT_URL,
     encoding: null,
     form: {
       selector: options.selector,
+      states: states.toString(),
       html,
     },
   });
